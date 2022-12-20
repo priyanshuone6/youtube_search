@@ -1,24 +1,41 @@
 import psycopg2
 
+import yt
+
+DATABASE = "test_app"
+USER = "postgres"
+PASSWORD = "1234"
+HOST = "localhost"
+PORT = "5432"
+
+
 # Connect to the database
 con = psycopg2.connect(
-    host="localhost", database="yttest", user="postgres", password="postgres"
+    host=HOST, database=DATABASE, user=USER, password=PASSWORD, port=PORT
 )
 
-
 # Create a cursor
-cur = con.cursor()
+cursor = con.cursor()
 
-# Execute a query
-cur.execute("select id, name from test")
 
-rows = cur.fetchall()
+# create table
+cursor.execute(
+    "CREATE TABLE IF NOT EXISTS videos (id SERIAL PRIMARY KEY, title VARCHAR(255), description VARCHAR(255), thumbnail_url VARCHAR(255), publishing_datetime TIMESTAMP)"
+)
 
-for row in rows:
-    print(row)
+cursor.execute(
+    "CREATE INDEX IF NOT EXISTS idx_videos_publishing_datetime ON videos (publishing_datetime DESC)"
+)
+
+for video in yt.get_yt_videos():
+    cursor.execute(
+        "INSERT INTO videos (title, description, thumbnail_url, publishing_datetime) VALUES (%s, %s, %s, %s)",
+        (video.title, video.description, video.thumbnail_url, video.published_at),
+    )
+
 
 # Close the cursor
-cur.close()
+cursor.close()
 
 # Close the connection
 con.close()
