@@ -8,7 +8,7 @@ API_KEY = "AIzaSyD0PDzc7yTNn-GfXvS52KpI2LRzdJnW848"
 
 
 @dataclass
-class VideoObjects:
+class Video:
     title: str
     description: str
     thumbnail_url: str
@@ -36,7 +36,7 @@ def get_yt_videos():
         if search_result["id"]["kind"] == "youtube#video":
             try:
                 snippet = search_result["snippet"]
-                video = VideoObjects(
+                video = Video(
                     snippet["title"],
                     snippet["description"],
                     snippet["thumbnails"]["medium"]["url"],
