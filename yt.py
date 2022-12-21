@@ -1,13 +1,18 @@
+# Description: This file contains the code to get YouTube videos from the API.
+
 import logging
 import os
+import time
 from dataclasses import dataclass
 from datetime import datetime
 
-from dotenv import load_dotenv
+import dotenv
 from googleapiclient.discovery import build
 
+import db
+
 # Load environment variables from .env file
-load_dotenv()
+dotenv.load_dotenv()
 API_KEY = os.getenv("API_KEY")
 
 
@@ -64,4 +69,21 @@ def get_yt_videos():
     return list_of_videos
 
 
-# service.close()
+def call_yt_interval():
+
+    # Create database object
+    db_obj = db.PostgresDB()
+
+    # Call the function to get videos
+    while True:
+        # Get latest timestamp from database
+        timestamp = db_obj.get_max_timestamp()
+        videos = get_yt_videos(timestamp)
+        db_obj.insert_videos(videos)
+
+        # Sleep for 10 seconds
+        time.sleep(10)
+
+
+if __name__ == "__main__":
+    call_yt_interval()
