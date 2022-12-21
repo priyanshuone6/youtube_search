@@ -1,6 +1,11 @@
 # 🔎 YouTube Search
 YouTube Search is an API that retrieves the most recent videos from YouTube for a specified tag or search query, paginated and ordered in reverse chronological order of their publishing date-time.
 
+## 🌐 Tech Stack
+- Python
+- PostgreSQL
+- Flask
+
 ## 📋 Requirements
 - Python 3.7 or higher
 - PostgreSQL
@@ -18,8 +23,8 @@ pip install -r requirements.txt
 
 ## 🚀 Running the project
 - Clone the repository
-- Run the django server
+- Run the flask app using the following command:
 
 ```bash
-python manage.py runserver
+flask run
 ```
