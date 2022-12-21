@@ -54,11 +54,17 @@ def get_yt_videos():
         if search_result["id"]["kind"] == "youtube#video":
             try:
                 snippet = search_result["snippet"]
+
+                # Format YouTube's datetime to unix epoch timestamp
+                published_at_epoch = datetime.strptime(
+                    snippet["publishedAt"], "%Y-%m-%dT%H:%M:%SZ"
+                ).timestamp()
+
                 video = Video(
                     snippet["title"],
                     snippet["description"],
                     snippet["thumbnails"]["medium"]["url"],
-                    snippet["publishedAt"],
+                    published_at_epoch,
                 )
                 list_of_videos.append(video)
 
