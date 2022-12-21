@@ -1,12 +1,14 @@
 import logging
+import os
 from dataclasses import dataclass
 from datetime import datetime
 
+from dotenv import load_dotenv
 from googleapiclient.discovery import build
 
-# YouTube Data API key
-# You can get your own API key at https://developers.google.com/youtube/v3/getting-started
-API_KEY = "AIzaSyD0PDzc7yTNn-GfXvS52KpI2LRzdJnW848"
+# Load environment variables from .env file
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
 
 
 @dataclass

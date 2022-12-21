@@ -1,14 +1,17 @@
+import os
+
 import psycopg2
+from dotenv import load_dotenv
 
 import yt
 
-# Database credentials
-DATABASE = "test_app"
-USER = "postgres"
-PASSWORD = "1234"
-HOST = "localhost"
-PORT = "5432"
-
+# Load environment variables from .env file
+load_dotenv()
+DATABASE = os.getenv("DATABASE")
+USER = os.getenv("USER")
+PASSWORD = os.getenv("PASSWORD")
+HOST = os.getenv("HOST")
+PORT = os.getenv("PORT")
 
 # Connect to the database
 con = psycopg2.connect(
@@ -17,7 +20,6 @@ con = psycopg2.connect(
 
 # Create a cursor
 cursor = con.cursor()
-
 
 # Create table
 cursor.execute(
