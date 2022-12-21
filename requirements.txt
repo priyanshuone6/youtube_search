@@ -1,6 +1,9 @@
 flask
+
+# Libraries for using YouTube APIs
 google-api-python-client
-google-auth-oauthlib
 google-auth-httplib2
-psycopg2
-python-dotenv
+google-auth-oauthlib
+
+psycopg2  # PostgreSQL database adapter for Python
+python-dotenv  # Reads .env file and set them as environment variables
