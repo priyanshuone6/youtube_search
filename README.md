@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 - Install PostgreSQL (see [here](https://www.postgresql.org/download/) for instructions)
 - Create a database in PostgreSQL
-- Add environment variables in a file named `.env`.
+- Update YouTube API key and database credentials environment variables in the file named `.env`.
 
 ## 📁 Project structure
 ```
@@ -42,3 +42,13 @@ pip install -r requirements.txt
 ```bash
 flask run
 ```
+
+- Also run the Youtube Search cron method using the following command:
+
+```bash
+python yt.py
+```
+
+- Access GET `/videos` to get latest uploaded videos from YouTube and query parameter `after` in the format `%Y-%m-%dT%H:%M:%SZ`. By default it returns the latest one videos. You can also specify the number of items to be returned using the query parameter `num_items`.
+For example:
+`http://127.0.0.1:5000/videos?after=2022-12-22T13:40:10Z&num_items=3`
