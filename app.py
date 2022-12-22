@@ -3,6 +3,7 @@
 from flask import Flask, request
 
 import db
+import yt
 
 # Create Flask app
 app = Flask(__name__)
@@ -11,19 +12,22 @@ app = Flask(__name__)
 db_obj = db.PostgresDB()
 
 
-@app.route("/data")
-def data():
-    # here we want to get the value of user (i.e. ?user=some-value)
-    user = request.args.get("user")
+@app.route("/")
+def index():
+    return "access GET /videos to get latest uploaded fifa videos."
 
 
 @app.route("/videos")
-def index():
-    after = request.args.get("after", 0, int)
-    num_items = request.args.get("num_items", 0, int)
+def get_videos():
+    after = request.args.get("after")
+    if after is None:
+        return f"Query param 'after' in the format {yt.DATE_FORMAT} is required", 400
+    num_items = request.args.get("num_items", 1, int)
+
     # Execute query to get all videos
-    videos = db_obj.get_all_videos(after=after, num_items=num_items)
-    return [videos, after, num_items]
+    videos = db_obj.get_videos(after=after, num_items=num_items)
+
+    return [yt.Video(*video[1:]) for video in videos]
 
 
 if __name__ == "__main__":
