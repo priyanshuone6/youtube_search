@@ -80,7 +80,9 @@ def call_yt_interval():
         timestamp = db_obj.get_max_timestamp() or datetime.utcnow().strftime(
             DATE_FORMAT
         )
+        # Get videos from YouTube API at given timestamp
         videos = get_yt_videos(timestamp)
+        # Insert videos into database
         db_obj.insert_videos(videos)
 
         # Sleep for 10 seconds

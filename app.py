@@ -19,9 +19,14 @@ def index():
 
 @app.route("/videos")
 def get_videos():
+    # Get query params
     after = request.args.get("after")
+
+    # Validate query params
     if after is None:
         return f"Query param 'after' in the format {yt.DATE_FORMAT} is required", 400
+
+    # Get optional query params
     num_items = request.args.get("num_items", 1, int)
 
     # Execute query to get all videos

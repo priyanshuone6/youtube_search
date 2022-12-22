@@ -24,6 +24,7 @@ class PostgresDB:
 
     @contextmanager
     def connect(self):
+        """Connect to the database and return a cursor"""
         with psycopg2.connect(
             host=HOST, database=DATABASE, user=DB_USER, password=DB_PASSWORD, port=PORT
         ) as conn:
@@ -31,18 +32,21 @@ class PostgresDB:
                 yield cursor
 
     def create_table(self):
+        """Create table if it doesn't exist"""
         with self.connect() as cursor:
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS videos (id SERIAL PRIMARY KEY, title VARCHAR(255), description VARCHAR(255), thumbnail_url VARCHAR(255), publishing_datetime VARCHAR(255))"
             )
 
     def create_index(self):
+        """Create index  of publishing_datetime if it doesn't exist"""
         with self.connect() as cursor:
             cursor.execute(
                 "CREATE INDEX IF NOT EXISTS idx_videos_publishing_datetime ON videos (publishing_datetime DESC)"
             )
 
     def insert_videos(self, videos):
+        """Insert videos into the database"""
 
         if not videos:
             return
@@ -71,6 +75,7 @@ class PostgresDB:
             )
 
     def get_videos(self, after=0, num_items=0):
+        """Get videos from the database after a certain timestamp"""
         with self.connect() as cursor:
             cursor.execute(
                 "SELECT * FROM videos WHERE %s < publishing_datetime ORDER BY publishing_datetime DESC LIMIT %s",
@@ -79,6 +84,7 @@ class PostgresDB:
             return cursor.fetchall()
 
     def get_max_timestamp(self):
+        """Get the latest timestamp from the database"""
         with self.connect() as cursor:
             cursor.execute("SELECT MAX(publishing_datetime) FROM videos")
             timestamp = cursor.fetchone()[0]
