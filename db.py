@@ -28,7 +28,7 @@ class PostgresDB:
 
     def create_table(self):
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS videos (id SERIAL PRIMARY KEY, title VARCHAR(255), description VARCHAR(255), thumbnail_url VARCHAR(255), publishing_datetime TIMESTAMP)"
+            "CREATE TABLE IF NOT EXISTS videos (id SERIAL PRIMARY KEY, title VARCHAR(255), description VARCHAR(255), thumbnail_url VARCHAR(255), publishing_datetime BIGINT)"
         )
 
     def create_index(self):
@@ -38,7 +38,6 @@ class PostgresDB:
 
     def insert_videos(self, videos):
 
-        # videos = get_yt_videos();
         if videos:
             query = (
                 "INSERT INTO videos (title, description, thumbnail_url, publishing_datetime) VALUES"

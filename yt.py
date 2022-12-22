@@ -23,7 +23,7 @@ class Video:
     title: str
     description: str
     thumbnail_url: str
-    published_at: str
+    published_at: int
 
 
 def get_yt_videos():
