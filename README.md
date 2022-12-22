@@ -38,19 +38,21 @@ pip install -r requirements.txt
 ## 🚀 Running the project
 - Clone the repository
 - Start the PostgreSQL server
-- Run the flask app using the following command:
+
+- Run the background process to get YouTube videos and store them in the database using the following command:
+```bash
+python yt.py
+```
+
+- Also run the flask app using the following command:
 
 ```bash
 flask run
 ```
 
-- Also run the Youtube Search cron method using the following command:
-
-```bash
-python yt.py
-```
-
-- Access GET `/videos` to get latest uploaded videos from YouTube and query parameter `after` in the format `%Y-%m-%dT%H:%M:%SZ`. By default it returns the latest one videos. You can also specify the number of items to be returned using the query parameter `num_items`.
+- Access GET `/videos` to get latest uploaded videos from YouTube sorted in descending order by their published date time. It accepts two query parameter
+  - `after`: (required) date time after which videos are to be returned. It should be in the format `%Y-%m-%dT%H:%M:%SZ`.
+  - `num_items`: (optional) number of items to be returned, default is one.
 
 For example:
 `http://127.0.0.1:5000/videos?after=2022-12-22T13:40:10Z&num_items=3`
