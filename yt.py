@@ -23,10 +23,13 @@ class Video:
     title: str
     description: str
     thumbnail_url: str
-    published_at: int
+    published_at: str
 
 
-def get_yt_videos():
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
+
+def get_yt_videos(publishedAfter):
     """
     Get YouTube videos from the API and return a list of video objects having title,
     description, thumbnail url and published date and time of the video.
@@ -41,10 +44,7 @@ def get_yt_videos():
         part="snippet",
         type="video",
         order="date",
-        # maxResults=1,
-        publishedAfter=datetime.utcfromtimestamp((datetime.now().timestamp())).strftime(
-            "%Y-%m-%dT%H:%M:%S.0Z"
-        ),
+        publishedAfter=publishedAfter,
     )
     response = request.execute()
 
@@ -54,17 +54,11 @@ def get_yt_videos():
         if search_result["id"]["kind"] == "youtube#video":
             try:
                 snippet = search_result["snippet"]
-
-                # Format YouTube's datetime to unix epoch timestamp
-                published_at_epoch = datetime.strptime(
-                    snippet["publishedAt"], "%Y-%m-%dT%H:%M:%SZ"
-                ).timestamp()
-
                 video = Video(
                     snippet["title"],
                     snippet["description"],
                     snippet["thumbnails"]["medium"]["url"],
-                    published_at_epoch,
+                    snippet["publishedAt"],
                 )
                 list_of_videos.append(video)
 
@@ -83,7 +77,9 @@ def call_yt_interval():
     # Call the function to get videos
     while True:
         # Get latest timestamp from database
-        timestamp = db_obj.get_max_timestamp()
+        timestamp = db_obj.get_max_timestamp() or datetime.utcnow().strftime(
+            DATE_FORMAT
+        )
         videos = get_yt_videos(timestamp)
         db_obj.insert_videos(videos)
 
